@@ -5,30 +5,36 @@ const Stopwatch = (props) => {
   let [stopwatchIsOn, editStopwatchIsOn] = useState(false);
 
   const formatTime = () => {
-    const getSeconds = `0${(props.timer % 60)}`.slice(-2)
-    const minutes = `${Math.floor(props.timer / 60)}`
-    const getMinutes = `0${minutes % 60}`.slice(-2)
-    const getHours = `0${Math.floor(props.timer / 3600)}`.slice(-2)
+    const getSeconds = `0${props.timer % 60}`.slice(-2);
+    const minutes = `${Math.floor(props.timer / 60)}`;
+    const getMinutes = `0${minutes % 60}`.slice(-2);
+    const getHours = `0${Math.floor(props.timer / 3600)}`.slice(-2);
 
-    return `${getHours} : ${getMinutes} : ${getSeconds}`
-  }
+    return `${getHours} : ${getMinutes} : ${getSeconds}`;
+  };
 
   const changeStatusStopwatch = () => {
     editStopwatchIsOn(!stopwatchIsOn);
     !stopwatchIsOn ? props.setStartTimer() : props.setStopTimer();
   };
 
-  const setWait = () => {
-    editStopwatchIsOn(!stopwatchIsOn);
-    props.setWaitTimer(stopwatchIsOn);
-  }
+  const setWait = (e) => {
+    if (stopwatchIsOn) {
+      editStopwatchIsOn(!stopwatchIsOn);
+      e.target.disabled = true;
+      setInterval(() => {
+        e.target.disabled = false;
+      }, 300);
+      props.setWaitTimer(stopwatchIsOn);
+    }
+  };
 
   const setReset = () => {
     if (stopwatchIsOn) {
-        props.setResetTimer();
+      props.setResetTimer();
     }
-  }
-  
+  };
+
   return (
     <div>
       <span className={styles.stopwatch_time}>{formatTime()}</span>
@@ -40,13 +46,14 @@ const Stopwatch = (props) => {
           {stopwatchIsOn === false && <span>Start</span>}
           {stopwatchIsOn === true && <span>Stop</span>}
         </button>
-        <button onDoubleClick={setWait} 
+        <button
+          onDoubleClick={setWait}
           className={`${styles.stopwatch_wait} ${styles.gradient_button}`}
         >
           Wait
         </button>
         <button
-          onClick={setReset} 
+          onClick={setReset}
           className={`${styles.stopwatch_reset} ${styles.gradient_button}`}
         >
           Reset
