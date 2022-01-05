@@ -1,0 +1,27 @@
+
+.gradient_button {
+    text-decoration: none;
+    display: inline-block;
+    color: white;
+    padding: 10px 15px;
+    margin: 5px 10px;
+    border-radius: 15px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background-image: linear-gradient(
+      to right,
+      #afcfca 0%,
+      #19097e 51%,
+      #42f1d4 100%
+    );
+    background-size: 200% auto;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    transition: 0.5s;
+  }
+  .gradient_button:hover {
+    background-position: right center;
+  }
+  
+  .stopwatch_time {
+    font-size: 82px;
+  }
