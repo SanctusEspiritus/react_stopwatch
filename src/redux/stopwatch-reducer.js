@@ -1,3 +1,5 @@
+import { Observable } from "rxjs";
+
 const SET_START_TIMER = "/STOPWATCH/SET_START_TIMER";
 const SET_STOP_TIMER = "/STOPWATCH/SET_STOP_TIMER";
 
@@ -30,10 +32,7 @@ const startTimer = () => ({ type: SET_START_TIMER });
 const stopTimer = () => ({ type: SET_STOP_TIMER });
 
 export const setStartTimer = () => async (dispatch) => {
-  const myInterval = setInterval(() => {
-    dispatch(startTimer());
-  }, 1000);
-  interavals.push(myInterval);
+  setTimerInterval(dispatch);
 };
 
 export const setStopTimer = () => async (dispatch) => {
@@ -44,20 +43,24 @@ export const setStopTimer = () => async (dispatch) => {
 export const setWaitTimer = (starting) => async (dispatch) => {
   interavals.forEach(clearInterval);
   if (!starting) {
-    const myInterval = setInterval(() => {
-      dispatch(startTimer());
-    }, 1000);
-    interavals.push(myInterval);
+    setTimerInterval(dispatch);
   }
 };
 
 export const setResetTimer = () => async (dispatch) => {
   interavals.forEach(clearInterval);
   dispatch(stopTimer());
-  const myInterval = setInterval(() => {
-    dispatch(startTimer());
-  }, 1000);
-  interavals.push(myInterval);
+  setTimerInterval(dispatch);
 };
+
+const setTimerInterval = (dispatch) => {
+  const stream$ = new Observable(observer => {
+    const myInterval = setInterval(() => {
+      observer.next(dispatch(startTimer()));
+    }, 1000);
+    interavals.push(myInterval);
+  });
+  stream$.subscribe(err => console.log(err));
+}
 
 export default stopwatchReducer;
