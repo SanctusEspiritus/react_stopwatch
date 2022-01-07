@@ -6,7 +6,7 @@ const SET_STOP_TIMER = "/STOPWATCH/SET_STOP_TIMER";
 let interavals = [];
 
 let initialState = {
-  timer: 0
+  timer: 0,
 };
 
 const stopwatchReducer = (state = initialState, action) => {
@@ -54,13 +54,16 @@ export const setResetTimer = () => async (dispatch) => {
 };
 
 const setTimerInterval = (dispatch) => {
-  const stream$ = new Observable(observer => {
+  const stream$ = new Observable((observer) => {
     const myInterval = setInterval(() => {
       observer.next(dispatch(startTimer()));
     }, 1000);
     interavals.push(myInterval);
   });
-  stream$.subscribe(err => console.log(err));
-}
+  stream$.subscribe(
+    (objAction) => console.log(objAction),
+    (error) => console.log(error)
+  );
+};
 
 export default stopwatchReducer;
